@@ -1,0 +1,16 @@
+"demo_id": {
+    "pre_processing": {
+      "run_new": {
+        "dependency": "none",
+        "arguments": {
+          "--samplesheet": "symlink.samplesheet.tsv",
+          "--studydesign": "symlink.studydesign.json"
+        },
+      "status": "COMPLETED",
+      "command": "sbatch scripts/pre/new.sh",
+      "log": "symlink.log",
+      "study_id": "symlink",
+      "next": "run_get_genome_sources"
+          }
+  }
+      
