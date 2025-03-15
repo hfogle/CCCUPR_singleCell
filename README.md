@@ -82,7 +82,7 @@ CCCUPR_singleCell
       - integrate_samples_atac.sh   
     - dual
       - feature_count_multi.sh
-      - initialize_objects_multi.sh
+      - create_assay_multi.sh
       - filter_cells_multi.sh
       - label_cells_multi.sh
       - transfer_labels_paired.sh
