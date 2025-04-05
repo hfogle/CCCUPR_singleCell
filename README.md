@@ -44,9 +44,10 @@ CCCUPR_singleCell
       - processed_data
         - count
         - inital
+        - labels
         - filtered
         - labeled
-          - cell_labels
+        - transformed
         - integrated
       - meta_data
       - reports
@@ -80,13 +81,15 @@ CCCUPR_singleCell
       - create_assay_activity.sh
       - integrate_samples_activity.sh
       - integrate_samples_atac.sh   
-    - dual
+    - multi
       - feature_count_multi.sh
       - create_assay_multi.sh
       - filter_cells_multi.sh
       - label_cells_multi.sh
+      - integrate_samples_multi.sh    
+    - cross
+      - coembed_assays_paired.R
       - transfer_labels_paired.sh
-      - integrate_samples_paired.sh 
     - analysis  
   - config
     - conda_environment.yml
