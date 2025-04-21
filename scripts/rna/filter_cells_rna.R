@@ -49,11 +49,67 @@ var$EXIT_STATUS <- 0
 tic("RUNTIME: ")
 
 
+# IO paths
+in.path <- file.path("processed_datasets",PROJ,"cellranger_output", paste0(ID,"-RNA"),"outs","filtered_feature_bc_matrix")
+out.path <- file.path("processed_datasets",PROJ,"cell_labels","doublet_labels")
+fig.path <- file.path("processed_datasets",PROJ,"figures")
 
+
+# computeDoubletDensity method
+# https://bioconductor.org/packages/3.15/bioc/vignettes/scDblFinder/inst/doc/computeDoubletDensity.html
+library(DropletUtils)
+sce <- read10xCounts(in.path)
+sce
+
+library(scuttle)
+set.seed(1001)
+sce <- logNormCounts(sce)
+
+library(scran)
+dec <- modelGeneVar(sce)
+hvgs <- getTopHVGs(dec)
+
+library(scater)
+set.seed(1002)
+sce <- runPCA(sce, ncomponents=30, subset_row=hvgs)
+sce <- runTSNE(sce, dimred="PCA")
+
+set.seed(1003)
+library(scDblFinder)
+scores <- computeDoubletDensity(sce, subset.row=hvgs)
+cells <- colData(sce)
+cells <- cells$Barcode
+names(scores) <- cells
+p1 <- plotTSNE(sce, colour_by=I(log1p(scores)))
+
+# save figures and output
+ggsave(filename = file.path(fig.path, paste0(ID,"_doublets_tsne_RNA.tiff")),plot = p1, width = 12,height = 8, device = "tiff")
+ggsave(filename = file.path(fig.path, paste0(ID,"_doublets_tsne_RNA.jpg")),plot = p1, width = 12,height = 8, device = "jpg")
+saveRDS(scores,file.path(out.path,paste0(ID,"_doublet_scores.rds")))
+
+doublet_data <- readRDS(file = file.path(ann.path,paste0(ID,"_doublet_scores.rds")))
+doublet_threshold <- 1.9
+
+
+data <- readRDS(file.path(in.path,paste0(ID,"_Initial_Seurat_Object.rds")))
+data <- AddMetaData(
+  object = data,
+  metadata = doublet_data,
+  col.name = 'doublets'
+)
+filtered <- subset(
+  x = data,
+  subset = nFeature_RNA > 200 &
+    percent.mt < 20 &
+    doublets <= doublet_threshold
+)
 
 #######################
 #  Output             #
 #######################
+
+saveRDS(filtered,file.path(out.path,paste0(ID,"_Filtered_Seurat_Object_RNA.rds")))
+
 toc()
 cat(Sys.info())
 var$EXIT_STATUS <- 1
