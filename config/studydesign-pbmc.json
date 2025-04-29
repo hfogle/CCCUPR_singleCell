@@ -1,0 +1,68 @@
+{
+  "record": {
+    "submit_uid": "hfogle",
+    "submit_date": "20250408",
+    "study_label": "PBMC_demo_scRNA",
+    "study_name": "10X scRNA-seq demo workflow",
+    "study_description": "Blood PBMC samples",
+    "study_assays": "scRNA-seq"
+  },
+  "study": {
+    "sample_type": "blood",
+    "sample_type_ontology_term_id": "UBERON_0000178",
+    "tissue_type": "tissue",
+    "tissue": "PBMC",
+    "tissue_ontology_term_id": "CL_2000001",
+    "organism": "Homo sapiens",
+    "organism_ontology_term_id": "NCBITaxon_9606",
+    "sample_collection_method": "blood draw",
+    "sample_preservation_method": "fresh",
+    "cell_enrichment": "PBMC",
+    "protocol_url": "NA",
+    "sex": "female",
+    "sex_ontology_term_id": "PATO_0000383",
+    "disease": "breast cancer",
+    "disease_ontology_term_id": "MONDO_0007254",
+    "ethnicity": "Puerto Rican",
+    "self_reported_ethnicity_ontology_term_id": "HANCESTRO_0421",
+    "age": "Years 40-49",
+    "development_stage_ontology_term_id": "HsapDv:0000239",
+    "sample_collection_site": "CCCUPR",
+    "institute": "CCCUPR",
+    "sampled_site_condition": "healthy"
+  },
+  "assay": {
+    "assay_type": "scRNA-seq",
+    "assay_ontology_term_id": "EFO_0022604",
+    "platform": "Chromium Single Cell",
+    "chemistry": "Universal 3' Gene Expression v4",
+    "suspension_type": "cell",
+    "sequenced_fragment": "3' tag",
+    "umi_barcode": "yes"
+  },
+  "design": {
+    "variable_name": "cancer status",
+    "variable_value": "categorical",
+    "variable_class": "factor",
+    "variable_unit": ["cancer","control"],
+    "variable_reference": "control",
+    "variable_distribution": "categorical"
+  },
+  "data": {
+    "reference_genome": "GRCh38",
+    "gene_annotation_version": "p14",
+    "alignment_software": "cellranger-9.0.1",
+    "intron_inclusion": "yes",
+    "sequencing_platform": "Illumina Hiseq 2000",
+    "raw_format": "FASTQ PHRED64",
+    "exchange_format": "H5AD ANNDATA",
+    "batch_condition": "NA",
+    "feature_barcode_library": "NA",
+    "alignment_sequences": "standard chromosomes",
+    "alignment_biotypes": ["protein_coding","lncRNA"],
+    "data_location": "cccbiocombuting02",
+    "raw_path": "/opt/data/sc-RNA-seq/PBMC_demo_scRNA/raw_data",
+    "metadata_path": "/opt/data/sc-RNA-seq/PBMC_demo_scRNA/meta_data",
+    "alignment_reference_path": "/opt/data/sc-RNA-seq/PBMC_demo_scRNA/reference_data/refdata-gex-GRCh38-2024-A"
+  }
+}

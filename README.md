@@ -39,7 +39,8 @@ Data Processing Pipeline for scRNA-Seq, scATAC-Seq, Paired scRNA-scATAC-Seq, and
 CCCUPR_singleCell
   - data
     - <STUDY_ID>
-      - preprocessed_data
+      - raw_data
+      - exchange_data
       - reference_data
       - processed_data
         - count

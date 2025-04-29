@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
-
 #SBATCH --job-name  count_features_rna
 #SBATCH --partition LocalQ
 #SBATCH --ntasks 1
-#SBATCH --cpus-per-task 13
-#SBATCH --array=1-2
-#SBATCH --open-mode=append
-#SBATCH --output logs/count_features_rna.log
+#SBATCH --cpus-per-task 17
+#SBATCH --array=1-$2
+
 
 WDIR=$pwd
 STUDY=$1
 STUDYDESIGN=${WDIR}/data/${STUDY}/meta_data/studydesign.json
 SAMPLESHEET=${WDIR}/data/${STUDY}/meta_data/samplesheet.tsv
+
 ATICOL=awk -v RS='\t' '/^ARRAY_ID$/{print NR; exit}' $SAMPLESHEET
 SRCCOL=awk -v RS='\t' '/^SOURCE_ID$/{print NR; exit}' $SAMPLESHEET
 BATCOL=awk -v RS='\t' '/^BATCH_ID$/{print NR; exit}' $SAMPLESHEET
@@ -24,33 +23,22 @@ FILEID=$(awk -v ARRAY_ID=$SLURM_ARRAY_TASK_ID '$ATICOL==ARRAY_ID {print $FIDCOL}
 GROUP=$(awk -v ARRAY_ID=$SLURM_ARRAY_TASK_ID '$ATICOL==ARRAY_ID {print $GRPCOL}' $SAMPLESHEET)
 
 logs=${WDIR}/data/${STUDY}/processed_data/logs
+outdir=${WDIR}/data/${STUDY}
 
 
-table=/opt/data/sc-RNA-seq/PBMC_demo_scRNA/meta_data/samplesheet.tsv
-indir=/opt/data/sc-RNA-seq/PBMC_demo_scRNA/raw_data
-outdir=/opt/data/sc-RNA-seq/PBMC_demo_scRNA/processed_data/sample_alignment
-ref=/opt/data/sc-RNA-seq/PBMC_demo_scRNA/reference_data/refdata-gex-GRCh38-2024-A
-logs=/opt/data/sc-RNA-seq/PBMC_demo_scRNA/logs
+REF=$(jq '.data.alignment_reference_path' $STUDYDESIGN | tr -d \")
+RAW_DIR=$(jq '.data.raw_path' $STUDYDESIGN | tr -d \")
 
-# Get sample ID from the samplesheet
-
-sample=$(awk -v ARRAY_ID=$SLURM_ARRAY_TASK_ID '$1==ARRAY_ID {print $8}' $table)
-prefix=$(awk -v ARRAY_ID=$SLURM_ARRAY_TASK_ID '$1==ARRAY_ID {print $7}' $table)
-
-
-
-echo "########################################################"
-
-
-cellranger count --id=${sample} \
-           --transcriptome=${ref} \
-           --fastqs=${indir} \
-           --sample=${sample} \
+cellranger count --id=${SAMPLE} \
+           --transcriptome=${REF} \
+           --fastqs=${RAW_DIR} \
+           --sample=${SAMPLE} \
            --localcores=16 \
            --localmem=64 \
            --create-bam=true \
-           --output-dir=${outdir}/${sample}-RNA &> ${logs}/cellranger_count_RNA_${sample}.log
+           --output-dir=${outdir}/processed_data/sample_alignment/${SAMPLE}-RNA &> ${logs}/cellranger_count_RNA_${SAMPLE}.log
 
 
+cp ${outdir}/processed_data/sample_alignment/${SAMPLE}-RNA/outs/web_summary.html ${outdir}/reports/cellranger/${SAMPLE}_cellranger_report.html
 
 echo "########################################################"
