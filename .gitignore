@@ -1,7 +1,8 @@
 # Local environment and data files
 data/
 renv
-
+temp
+oldscripts
 # History files
 .Rhistory
 .Rapp.history

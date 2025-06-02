@@ -6,7 +6,7 @@
 
 
 # Activate Conda environment
-source activate singlecell
+# source activate singlecell
 echo "\n########################################################################"
 ############################
 # Script Argument Parsing  #
@@ -120,51 +120,51 @@ fi
 # Perform checksums        #
 ############################
 echo "\n########################################################################"
-
-RAW_DIR=$(jq '.data.raw_path' $STUDYDESIGN | tr -d \")
-
-
-### create symlinks to raw files in working directory
-echo "Creating raw data symlinks in working directory....."
-for file in $(ls ${RAW_DIR}/*fastq.gz)
-do
-base=$(basename "$file")
-ln -s ${file} ${OUT_DIR}/raw_data/${base}
-done
-
-### sha256 checksums
-for file in $(ls ${RAW_DIR}/*fastq.gz) 
-do
-if [ -f ${file}.sha256 ] 
-then
-sum=$(sha256sum --check ${file}.sha256 $file)
-echo "Checksum status of $file ..... $sum"
-else
-echo "Creating sha256 checksum for $file"
-base=$(basename "$file")
-sha256sum $file > ${OUT_DIR}/reports/checksums/${base}.sha256
-fi
-done
-echo "\n########################################################################"
-
-### Count raw read files
-R1_COUNT=$(ls -1q ${RAW_DIR}/*R1_001.fastq.gz | wc -l)
-R2_COUNT=$(ls -1q ${RAW_DIR}/*R2_001.fastq.gz | wc -l)
-echo "R1 File Count" $R1_COUNT
-echo "R2 File Count" $R2_COUNT
-echo "\n########################################################################"
-
-### Validate fastq files (SeqFu)
-echo "Running SeqFu FASTQ file integrity checks ....."
-seqfu check --thousands --dir $RAW_DIR > ${OUT_DIR}/reports/seqfu/fastq_file_integrity_report.tsv
-echo "\n########################################################################"
-
-### Generate FastQC reports
-for file in $(ls ${RAW_DIR}/*fastq.gz) 
-do
-fastqc --noextract --nogroup -o ${OUT_DIR}/reports/fastqc $file
-done
-multiqc -o ${OUT_DIR}/reports -n fastqc_summary_report.html ${OUT_DIR}/reports/fastqc 
+# 
+# RAW_DIR=$(jq '.data.raw_path' $STUDYDESIGN | tr -d \")
+# 
+# 
+# ### create symlinks to raw files in working directory
+# echo "Creating raw data symlinks in working directory....."
+# for file in $(ls ${RAW_DIR}/*fastq.gz)
+# do
+# base=$(basename "$file")
+# ln -s ${file} ${OUT_DIR}/raw_data/${base}
+# done
+# 
+# ### sha256 checksums
+# for file in $(ls ${RAW_DIR}/*fastq.gz) 
+# do
+# if [ -f ${file}.sha256 ] 
+# then
+# sum=$(sha256sum --check ${file}.sha256 $file)
+# echo "Checksum status of $file ..... $sum"
+# else
+# echo "Creating sha256 checksum for $file"
+# base=$(basename "$file")
+# sha256sum $file > ${OUT_DIR}/reports/checksums/${base}.sha256
+# fi
+# done
+# echo "\n########################################################################"
+# 
+# ### Count raw read files
+# R1_COUNT=$(ls -1q ${RAW_DIR}/*R1_001.fastq.gz | wc -l)
+# R2_COUNT=$(ls -1q ${RAW_DIR}/*R2_001.fastq.gz | wc -l)
+# echo "R1 File Count" $R1_COUNT
+# echo "R2 File Count" $R2_COUNT
+# echo "\n########################################################################"
+# 
+# ### Validate fastq files (SeqFu)
+# echo "Running SeqFu FASTQ file integrity checks ....."
+# seqfu check --thousands --dir $RAW_DIR > ${OUT_DIR}/reports/seqfu/fastq_file_integrity_report.tsv
+# echo "\n########################################################################"
+# 
+# ### Generate FastQC reports
+# for file in $(ls ${RAW_DIR}/*fastq.gz) 
+# do
+# fastqc --noextract --nogroup -o ${OUT_DIR}/reports/fastqc $file
+# done
+# multiqc -o ${OUT_DIR}/reports -n fastqc_summary_report.html ${OUT_DIR}/reports/fastqc 
 ############################
 # Redirect Log             #
 #                          #

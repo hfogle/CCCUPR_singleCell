@@ -5,18 +5,17 @@
 # return standard script paths
 setdirs <- function(){
   dir <- list()
-  #dir$wdir <- dirname(dirname(study_path))
-  #dir$study <- basename(study_path)
-  dir$wdir <- getwd()
-  dir$config <- file.path(dir$wdir,"config")
-  dir$reference <- file.path(dir$wdir,"data",dir$study,"reference_data")
-  dir$metadata <- file.path(dir$wdir,"data",dir$study,"meta_data")
-  dir$logs <- file.path(dir$wdir,"data",dir$study,"logs") 
-  dir$figures <- file.path(dir$wdir,"data",dir$study,"figures") 
-  dir$reports <- file.path(dir$wdir,"data",dir$study,"reports") 
-  dir$inpath <- file.path(dir$wdir,"data",dir$study,"processed_data") 
+  dir$study <- "elsb"
+  dir$wdir <- file.path(getwd(),"data",dir$study)
+  dir$config <- file.path(getwd(),"config")
+  dir$reference <- file.path(dir$wdir,"reference_data")
+  dir$metadata <- file.path(dir$wdir,"meta_data")
+  dir$logs <- file.path(dir$wdir,"logs") 
+  dir$figures <- file.path(dir$wdir,"figures") 
+  dir$reports <- file.path(dir$wdir,"reports") 
+  dir$inpath <- file.path(dir$wdir,"processed_data") 
   dir$infile <- ""
-  dir$outpath <- file.path(dir$wdir,"data",dir$study,"processed_data") 
+  dir$outpath <- file.path(dir$wdir,"processed_data") 
   dir$outfile <- "" 
   return(dir)
 }
@@ -30,7 +29,7 @@ setvars <- function(x){
     var$ID <- var$ARGS[1]
   }
   if(missing(var$ARGS[2])) {
-    var$STUDY <- "elsb-paired"
+    var$STUDY <- "elsb"
   } else {
     var$STUDY <- var$ARGS[2]
   }
